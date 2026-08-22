@@ -31,6 +31,21 @@ class Reaction(BaseMessageWithGroup):
         reaction_message: generated.Reaction,
     ) -> Reaction:
         group_info = from_generated(GroupInfo, data_message.group_info)
+        if (
+            message_envelope.sync_message is not None
+            and message_envelope.sync_message.sent_message is not None
+        ):
+            destination = message_envelope.sync_message.sent_message.destination
+            destination_number = (
+                message_envelope.sync_message.sent_message.destination_number
+            )
+            destination_uuid = (
+                message_envelope.sync_message.sent_message.destination_uuid
+            )
+        else:
+            destination = None
+            destination_number = None
+            destination_uuid = None
         return cls(
             server_delivered_timestamp=message_envelope.server_delivered_timestamp,
             server_received_timestamp=message_envelope.server_received_timestamp,
@@ -46,6 +61,9 @@ class Reaction(BaseMessageWithGroup):
             target_author=reaction_message.target_author,
             target_author_number=reaction_message.target_author_number,
             target_author_uuid=reaction_message.target_author_uuid,
+            destination=destination,
+            destination_number=destination_number,
+            destination_uuid=destination_uuid,
         )
 
     @classmethod

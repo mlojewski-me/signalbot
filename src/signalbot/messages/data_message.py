@@ -81,6 +81,22 @@ class DataMessage(BaseMessageWithGroup):
         text_styles = from_generated_list(TextStyle, data_message.text_styles)
         group_info = from_generated(GroupInfo, data_message.group_info)
 
+        if (
+            message_envelope.sync_message is not None
+            and message_envelope.sync_message.sent_message is not None
+        ):
+            destination = message_envelope.sync_message.sent_message.destination
+            destination_number = (
+                message_envelope.sync_message.sent_message.destination_number
+            )
+            destination_uuid = (
+                message_envelope.sync_message.sent_message.destination_uuid
+            )
+        else:
+            destination = None
+            destination_number = None
+            destination_uuid = None
+
         received_data_message = DataMessage(
             server_delivered_timestamp=message_envelope.server_delivered_timestamp,
             server_received_timestamp=message_envelope.server_received_timestamp,
@@ -100,6 +116,9 @@ class DataMessage(BaseMessageWithGroup):
             sticker=sticker,
             text_styles=text_styles,
             view_once=data_message.view_once,
+            destination=destination,
+            destination_number=destination_number,
+            destination_uuid=destination_uuid,
         )
 
         if (

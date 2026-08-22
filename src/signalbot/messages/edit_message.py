@@ -22,6 +22,7 @@ class EditMessage(DataMessage):
             server_delivered_timestamp=data_message.server_delivered_timestamp,
             server_received_timestamp=data_message.server_received_timestamp,
             source_device=data_message.source_device,
+            source=data_message.source,
             source_name=data_message.source_name,
             source_number=data_message.source_number,
             source_uuid=data_message.source_uuid,
@@ -38,6 +39,9 @@ class EditMessage(DataMessage):
             timestamp=data_message.timestamp,
             view_once=data_message.view_once,
             target_sent_timestamp=target_sent_timestamp,
+            destination=data_message.destination,
+            destination_number=data_message.destination_number,
+            destination_uuid=data_message.destination_uuid,
         )
 
     @classmethod
