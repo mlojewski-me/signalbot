@@ -314,12 +314,12 @@ RAW_UNKNOWN_MESSAGE = envelope()
 
 async def test_parse_source_own_message(signal_api: SignalAPI):
     message = await parse(signal_api, RAW_SYNC_MESSAGE)
-    assert message.timestamp == TIMESTAMP
+    assert message.source is None
 
 
 async def test_parse_timestamp_own_message(signal_api: SignalAPI):
     message = await parse(signal_api, RAW_SYNC_MESSAGE)
-    assert message.source_number == SOURCE
+    assert message.timestamp == TIMESTAMP
 
 
 async def test_parse_type_own_message(signal_api: SignalAPI):
@@ -344,10 +344,8 @@ async def test_parse_private_conversation_own_message(signal_api: SignalAPI):
     message = await parse(signal_api, RAW_SYNC_MESSAGE_PRIVATE_CONVERSATION)
     assert isinstance(message, DataMessage)
     assert message.text == TEXT
-    assert message.destination == DESTINATION
-    assert message.destination_number == DESTINATION
-    assert message.source == SOURCE
-    assert message.source_number == SOURCE
+    assert message.source == DESTINATION
+    assert message.source_number == DESTINATION
 
 
 # Foreign Messages
@@ -397,10 +395,8 @@ async def test_read_reaction_private_conversation(signal_api: SignalAPI):
     assert message.emoji == "👍"
     assert message.timestamp == TIMESTAMP
     assert message.is_remove is False
-    assert message.destination == DESTINATION
-    assert message.destination_number == DESTINATION
-    assert message.source == SOURCE
-    assert message.source_number == SOURCE
+    assert message.source == DESTINATION
+    assert message.source_number == DESTINATION
 
 
 async def test_remote_delete_data_message(signal_api: SignalAPI):
@@ -425,10 +421,8 @@ async def test_remote_delete_sync_message_private_conversation(signal_api: Signa
     )
     assert isinstance(message, RemoteDelete)
     assert message.timestamp == REMOTE_DELETE_TIMESTAMP
-    assert message.destination == DESTINATION
-    assert message.destination_number == DESTINATION
-    assert message.source == SOURCE
-    assert message.source_number == SOURCE
+    assert message.source == DESTINATION
+    assert message.source_number == DESTINATION
 
 
 async def test_edit_message(signal_api: SignalAPI):
@@ -445,10 +439,8 @@ async def test_edit_message_private_conversation(signal_api: SignalAPI):
     assert isinstance(message, EditMessage)
     assert message.target_sent_timestamp == TIMESTAMP
     assert message.text == "Uhrzeit!"
-    assert message.destination == DESTINATION
-    assert message.destination_number == DESTINATION
-    assert message.source == SOURCE
-    assert message.source_number == SOURCE
+    assert message.source == DESTINATION
+    assert message.source_number == DESTINATION
 
 
 async def test_typing_message(signal_api: SignalAPI):

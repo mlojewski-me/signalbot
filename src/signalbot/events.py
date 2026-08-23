@@ -21,9 +21,6 @@ class BaseMessage(ABC, BaseModel):
     source_name: str | None = None
     source_number: str | None = None
     source_uuid: str | None = None
-    destination: str | None = None
-    destination_number: str | None = None
-    destination_uuid: str | None = None
     timestamp: int
 
     @abstractmethod
@@ -75,30 +72,6 @@ class BaseMessageWithGroup(BaseMessage):
 
         if self.source_number is not None:
             return self.source_number
-
-        error_msg = "Message does not contain a source"
-        raise ValueError(error_msg)
-
-    def conversation_or_group_id(self, bot_phone_number: str) -> str:
-
-        if self.group_info is not None and self.group_info.group_id is not None:
-            return self.group_info.group_id
-
-        if bot_phone_number == self.source_number:
-            # message send in 1 on 1 conversation by bot number itself
-            # should use destination params to send it in origin conversation,
-            # not in "Notes to Self"
-            if self.destination_uuid is not None:
-                return self.destination_uuid
-
-            if self.destination_number is not None:
-                return self.destination_number
-        else:
-            if self.source_uuid is not None:
-                return self.source_uuid
-
-            if self.source_number is not None:
-                return self.source_number
 
         error_msg = "Message does not contain a source"
         raise ValueError(error_msg)

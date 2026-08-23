@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from signalbot._generated import TextMode
 from signalbot._utils.generated_conversion import from_generated, from_generated_list
+from signalbot._utils.source import parse_source_from_envelope
 from signalbot.attachments import Attachment
 from signalbot.events import BaseMessageWithGroup, GroupInfo
 from signalbot.messages.data_message_content import Mention, Quote, Sticker, TextStyle
@@ -80,31 +81,16 @@ class DataMessage(BaseMessageWithGroup):
         sticker = from_generated(Sticker, data_message.sticker)
         text_styles = from_generated_list(TextStyle, data_message.text_styles)
         group_info = from_generated(GroupInfo, data_message.group_info)
-
-        if (
-            message_envelope.sync_message is not None
-            and message_envelope.sync_message.sent_message is not None
-        ):
-            destination = message_envelope.sync_message.sent_message.destination
-            destination_number = (
-                message_envelope.sync_message.sent_message.destination_number
-            )
-            destination_uuid = (
-                message_envelope.sync_message.sent_message.destination_uuid
-            )
-        else:
-            destination = None
-            destination_number = None
-            destination_uuid = None
+        source = parse_source_from_envelope(message_envelope)
 
         received_data_message = DataMessage(
             server_delivered_timestamp=message_envelope.server_delivered_timestamp,
             server_received_timestamp=message_envelope.server_received_timestamp,
-            source=message_envelope.source,
+            source=source.source,
             source_device=message_envelope.source_device,
             source_name=message_envelope.source_name,
-            source_number=message_envelope.source_number,
-            source_uuid=message_envelope.source_uuid,
+            source_number=source.number,
+            source_uuid=source.uuid,
             group_info=group_info,
             timestamp=timestamp,
             attachments=attachments,
@@ -116,9 +102,6 @@ class DataMessage(BaseMessageWithGroup):
             sticker=sticker,
             text_styles=text_styles,
             view_once=data_message.view_once,
-            destination=destination,
-            destination_number=destination_number,
-            destination_uuid=destination_uuid,
         )
 
         if (

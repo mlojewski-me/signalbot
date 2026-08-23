@@ -39,9 +39,6 @@ class EditMessage(DataMessage):
             timestamp=data_message.timestamp,
             view_once=data_message.view_once,
             target_sent_timestamp=target_sent_timestamp,
-            destination=data_message.destination,
-            destination_number=data_message.destination_number,
-            destination_uuid=data_message.destination_uuid,
         )
 
     @classmethod
