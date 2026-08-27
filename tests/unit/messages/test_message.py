@@ -314,7 +314,7 @@ RAW_UNKNOWN_MESSAGE = envelope()
 
 async def test_parse_source_own_message(signal_api: SignalAPI):
     message = await parse(signal_api, RAW_SYNC_MESSAGE)
-    assert message.source is None
+    assert message.source == SOURCE
 
 
 async def test_parse_timestamp_own_message(signal_api: SignalAPI):

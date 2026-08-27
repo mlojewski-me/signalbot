@@ -15,6 +15,7 @@ def parse_source_from_envelope(
     if (
         message_envelope.sync_message is not None
         and message_envelope.sync_message.sent_message is not None
+        and message_envelope.sync_message.sent_message.group_info is None
     ):
         destination = message_envelope.sync_message.sent_message.destination
         destination_number = (
